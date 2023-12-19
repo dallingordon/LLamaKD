@@ -1,0 +1,1 @@
+{"vocab_size": 32000, "sequence_length": 512, "hidden_dim": 100, "word_embed": 50, "sentence_embed": 200, "balanced_dim": 40, "mem_input_dim": 20, "mem_hidden_dim": 40, "mem_output_dim": 100, "memory_dim": 4}

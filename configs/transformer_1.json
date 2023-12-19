@@ -1,0 +1,1 @@
+{"vocab_size": 32000, "sequence_length": 512, "d_model": 64, "nhead": 2, "num_layers": 2, "dim_feedforward": 32}
