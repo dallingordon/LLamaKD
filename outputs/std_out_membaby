@@ -1,0 +1,1341 @@
+running script
+model_train_memorybaby.sh
+python train.py MemoryBaby mem_config_1.json 20 CPUDoubleFileDataset negativeten_ten memory_baby_1 --lr 0.0001
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': 100, 'word_embed': 100, 'sentence_embed': 200, 'balanced_dim': 50, 'mem_input_dim': 200, 'mem_hidden_dim': 20, 'mem_output_dim': 150, 'memory_dim': 6}
+Model memory usage: 395.78 MB
+Total parameters in the model: 103583300
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+MemoryBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=200, bias=True)
+  (we_down): Linear(in_features=100, out_features=50, bias=True)
+  (seq_down): Linear(in_features=200, out_features=50, bias=True)
+  (out_down): Linear(in_features=200, out_features=50, bias=True)
+  (to_mem): Linear(in_features=125000, out_features=200, bias=True)
+  (dim_memory): DimMemory(
+    (linears): ModuleList(
+      (0-4): 5 x Linear(in_features=200, out_features=20, bias=True)
+    )
+    (linear_out): Linear(in_features=20, out_features=150, bias=True)
+  )
+  (out): Linear(in_features=350, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": 100,
+    "word_embed": 100,
+    "sentence_embed": 200,
+    "balanced_dim": 50,
+    "mem_input_dim": 200,
+    "mem_hidden_dim": 20,
+    "mem_output_dim": 150,
+    "memory_dim": 6
+}
+
+Training for 20 epochs...
+
+optimizer set with lr=0.0001
+Epoch took 00:11:07
+Epoch 1/20, mse: nan
+Epoch took 00:11:46
+Epoch 2/20, mse: nan
+Epoch took 00:11:43
+Epoch 3/20, mse: nan
+Epoch took 00:11:50
+Epoch 4/20, mse: nan
+Epoch took 00:11:12
+Epoch 5/20, mse: nan
+Epoch took 00:11:34
+Epoch 6/20, mse: nan
+Epoch took 00:11:09
+Epoch 7/20, mse: nan
+Epoch took 00:10:59
+Epoch 8/20, mse: nan
+Epoch took 00:11:20
+Epoch 9/20, mse: nan
+Epoch took 00:11:07
+Epoch 10/20, mse: nan
+Epoch took 00:11:01
+Epoch 11/20, mse: nan
+Epoch took 00:11:27
+Epoch 12/20, mse: nan
+Epoch took 00:11:54
+Epoch 13/20, mse: nan
+Epoch took 00:12:46
+Epoch 14/20, mse: nan
+Epoch took 00:16:40
+Epoch 15/20, mse: nan
+Epoch took 00:17:06
+Epoch 16/20, mse: nan
+Epoch took 00:16:07
+Epoch 17/20, mse: nan
+Epoch took 00:17:51
+Epoch 18/20, mse: nan
+Epoch took 00:16:31
+Epoch 19/20, mse: nan
+Epoch took 00:17:18
+Epoch 20/20, mse: nan
+Trained model saved to: models/memory_baby_1_trained.pth
+
+running script
+model_train_memorybaby.sh
+python train.py MemoryBaby mem_config_1.json 20 CPUDoubleFileDataset negativeten_ten memory_baby_1 --lr 0.0001
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': 100, 'word_embed': 100, 'sentence_embed': 200, 'balanced_dim': 50, 'mem_input_dim': 200, 'mem_hidden_dim': 20, 'mem_output_dim': 150, 'memory_dim': 6}
+Model memory usage: 395.78 MB
+Total parameters in the model: 103583300
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+MemoryBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=200, bias=True)
+  (we_down): Linear(in_features=100, out_features=50, bias=True)
+  (seq_down): Linear(in_features=200, out_features=50, bias=True)
+  (out_down): Linear(in_features=200, out_features=50, bias=True)
+  (to_mem): Linear(in_features=125000, out_features=200, bias=True)
+  (dim_memory): DimMemory(
+    (linears): ModuleList(
+      (0-4): 5 x Linear(in_features=200, out_features=20, bias=True)
+    )
+    (linear_out): Linear(in_features=20, out_features=150, bias=True)
+  )
+  (out): Linear(in_features=350, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": 100,
+    "word_embed": 100,
+    "sentence_embed": 200,
+    "balanced_dim": 50,
+    "mem_input_dim": 200,
+    "mem_hidden_dim": 20,
+    "mem_output_dim": 150,
+    "memory_dim": 6
+}
+
+Training for 50 epochs...
+
+optimizer set with lr=1e-05
+gradient clipping turned on
+Epoch took 00:11:54
+Epoch 1/50, mse: 394.2603
+Epoch took 00:12:15
+Epoch 2/50, mse: 46.7021
+Epoch took 00:10:49
+Epoch 3/50, mse: 13.9036
+Epoch took 00:11:01
+Epoch 4/50, mse: 7.4683
+Epoch took 00:11:39
+Epoch 5/50, mse: 4.7588
+Epoch took 00:11:03
+Epoch 6/50, mse: 4.4028
+Epoch took 00:11:14
+Epoch 7/50, mse: 4.0728
+Epoch took 00:10:36
+Epoch 8/50, mse: 3.9122
+Epoch took 00:10:47
+Epoch 9/50, mse: 3.8497
+Epoch took 00:11:42
+Epoch 10/50, mse: 3.7713
+Epoch took 00:12:24
+Epoch 11/50, mse: 3.6210
+Epoch took 00:11:27
+Epoch 12/50, mse: 3.6874
+Epoch took 00:11:22
+Epoch 13/50, mse: 3.6035
+Epoch took 00:11:41
+Epoch 14/50, mse: 3.5778
+Epoch took 00:11:28
+Epoch 15/50, mse: 3.5261
+Epoch took 00:11:35
+Epoch 16/50, mse: 3.6413
+Epoch took 00:10:52
+Epoch 17/50, mse: 3.4972
+Epoch took 00:10:57
+Epoch 18/50, mse: 3.5693
+Epoch took 00:11:45
+Epoch 19/50, mse: 3.6519
+Epoch took 00:11:20
+Epoch 20/50, mse: 3.5685
+Epoch took 00:11:09
+Epoch 21/50, mse: 3.5492
+Epoch took 00:11:25
+Epoch 22/50, mse: 3.5870
+Epoch took 00:11:26
+Epoch 23/50, mse: 3.5939
+Epoch took 00:11:38
+Epoch 24/50, mse: 3.5301
+Epoch took 00:11:06
+Epoch 25/50, mse: 3.4831
+Epoch took 00:10:49
+Epoch 26/50, mse: 3.5696
+Epoch took 00:10:41
+Epoch 27/50, mse: 3.5311
+Epoch took 00:11:06
+Epoch 28/50, mse: 3.5058
+Epoch took 00:10:50
+Epoch 29/50, mse: 3.6391
+Epoch took 00:10:58
+Epoch 30/50, mse: 3.5887
+Epoch took 00:10:56
+Epoch 31/50, mse: 3.4553
+Epoch took 00:11:05
+Epoch 32/50, mse: 3.6301
+Epoch took 00:12:11
+Epoch 33/50, mse: 3.5567
+Epoch took 00:10:39
+Epoch 34/50, mse: 3.6472
+Epoch took 00:11:08
+Epoch 35/50, mse: 3.6023
+Epoch took 00:11:17
+Epoch 36/50, mse: 3.6238
+Epoch took 00:11:59
+Epoch 37/50, mse: 3.5877
+Epoch took 00:11:46
+Epoch 38/50, mse: 3.4900
+Epoch took 00:11:23
+Epoch 39/50, mse: 3.6137
+Epoch took 00:11:18
+Epoch 40/50, mse: 3.6041
+Epoch took 00:11:37
+Epoch 41/50, mse: 3.5673
+Epoch took 00:12:15
+Epoch 42/50, mse: 3.5371
+Epoch took 00:11:06
+Epoch 43/50, mse: 3.6093
+Epoch took 00:11:44
+Epoch 44/50, mse: 3.6228
+Epoch took 00:11:33
+Epoch 45/50, mse: 3.5377
+Epoch took 00:11:50
+Epoch 46/50, mse: 3.6080
+Epoch took 00:11:31
+Epoch 47/50, mse: 3.6125
+Epoch took 00:11:13
+Epoch 48/50, mse: 3.5951
+Epoch took 00:11:34
+Epoch 49/50, mse: 3.6329
+Epoch took 00:12:41
+Epoch 50/50, mse: 3.6125
+Trained model saved to: models/memory_baby_1_trained.pth
+
+running script
+model_train_memorybaby.sh
+python train.py MemoryBaby mem_config_1.json 20 CPUDoubleFileDataset negativeten_ten memory_baby_1 --lr 0.0001
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': 100, 'word_embed': 100, 'sentence_embed': 200, 'balanced_dim': 50, 'mem_input_dim': 200, 'mem_hidden_dim': 20, 'mem_output_dim': 150, 'memory_dim': 6}
+Model memory usage: 395.78 MB
+Total parameters in the model: 103583300
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+MemoryBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=200, bias=True)
+  (we_down): Linear(in_features=100, out_features=50, bias=True)
+  (seq_down): Linear(in_features=200, out_features=50, bias=True)
+  (out_down): Linear(in_features=200, out_features=50, bias=True)
+  (to_mem): Linear(in_features=125000, out_features=200, bias=True)
+  (dim_memory): DimMemory(
+    (linears): ModuleList(
+      (0-4): 5 x Linear(in_features=200, out_features=20, bias=True)
+    )
+    (linear_out): Linear(in_features=20, out_features=150, bias=True)
+  )
+  (out): Linear(in_features=350, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": 100,
+    "word_embed": 100,
+    "sentence_embed": 200,
+    "balanced_dim": 50,
+    "mem_input_dim": 200,
+    "mem_hidden_dim": 20,
+    "mem_output_dim": 150,
+    "memory_dim": 6
+}
+
+Training for 50 epochs...
+
+optimizer set with lr=0.0001
+gradient clipping turned on
+Loaded from 'models/memory_baby_1_trained.pth'
+Epoch took 00:13:09
+Epoch 1/50, mse: 3.5675
+Epoch took 00:13:00
+Epoch 2/50, mse: 3.6027
+Epoch took 00:13:07
+Epoch 3/50, mse: 3.5588
+Epoch took 00:12:42
+Epoch 4/50, mse: 3.5199
+Epoch took 00:12:51
+Epoch 5/50, mse: 3.5049
+Epoch took 00:13:10
+Epoch 6/50, mse: 3.6284
+Epoch took 00:12:53
+Epoch 7/50, mse: 3.5276
+Epoch took 00:12:31
+Epoch 8/50, mse: 3.6734
+Epoch took 00:13:57
+Epoch 9/50, mse: 3.5760
+Epoch took 00:13:28
+Epoch 10/50, mse: 3.5521
+Epoch took 00:12:49
+Epoch 11/50, mse: 3.6408
+Epoch took 00:12:46
+Epoch 12/50, mse: 3.6208
+Epoch took 00:13:24
+Epoch 13/50, mse: 3.5153
+Epoch took 00:13:56
+Epoch 14/50, mse: 3.6601
+Epoch took 00:13:20
+Epoch 15/50, mse: 3.4760
+Epoch took 00:13:02
+Epoch 16/50, mse: 3.6475
+Epoch took 00:12:59
+Epoch 17/50, mse: 3.5507
+Epoch took 00:13:24
+Epoch 18/50, mse: 3.6055
+Epoch took 00:12:29
+Epoch 19/50, mse: 3.5917
+Epoch took 00:12:43
+Epoch 20/50, mse: 3.4826
+Epoch took 00:12:34
+Epoch 21/50, mse: 3.5450
+Epoch took 00:12:35
+Epoch 22/50, mse: 3.6167
+Epoch took 00:12:09
+Epoch 23/50, mse: 3.6360
+Epoch took 00:12:59
+Epoch 24/50, mse: 3.5694
+Epoch took 00:11:54
+Epoch 25/50, mse: 3.5401
+Epoch took 00:13:05
+Epoch 26/50, mse: 3.5319
+Epoch took 00:12:37
+Epoch 27/50, mse: 3.5704
+Epoch took 00:12:24
+Epoch 28/50, mse: 3.4814
+Epoch took 00:12:43
+Epoch 29/50, mse: 3.6623
+Epoch took 00:12:38
+Epoch 30/50, mse: 3.6181
+Epoch took 00:12:16
+Epoch 31/50, mse: 3.6837
+Epoch took 00:12:45
+Epoch 32/50, mse: 3.6084
+Epoch took 00:12:38
+Epoch 33/50, mse: 3.6075
+Epoch took 00:12:48
+Epoch 34/50, mse: 3.6151
+Epoch took 00:11:40
+Epoch 35/50, mse: 3.5515
+Epoch took 00:12:50
+Epoch 36/50, mse: 3.5668
+Epoch took 00:12:40
+Epoch 37/50, mse: 3.6505
+Epoch took 00:12:13
+Epoch 38/50, mse: 3.5852
+Epoch took 00:11:43
+Epoch 39/50, mse: 3.5806
+Epoch took 00:11:28
+Epoch 40/50, mse: 3.6499
+Epoch took 00:11:30
+Epoch 41/50, mse: 3.6251
+Epoch took 00:11:40
+Epoch 42/50, mse: 3.6066
+Epoch took 00:11:31
+Epoch 43/50, mse: 3.4557
+Epoch took 00:11:16
+Epoch 44/50, mse: 3.6242
+Epoch took 00:11:39
+Epoch 45/50, mse: 3.6257
+Epoch took 00:11:37
+Epoch 46/50, mse: 3.5228
+Epoch took 00:11:54
+Epoch 47/50, mse: 3.6221
+Epoch took 00:11:32
+Epoch 48/50, mse: 3.6400
+Epoch took 00:11:53
+Epoch 49/50, mse: 3.5638
+Epoch took 00:11:28
+Epoch 50/50, mse: 3.5117
+Trained model saved to: models/memory_baby_1_trained.pth
+
+running script
+model_train_memorybaby.sh
+python train.py MemoryBaby mem_config_1.json 20 CPUDoubleFileDataset negativeten_ten memory_baby_1 --lr 0.0001
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': 100, 'word_embed': 100, 'sentence_embed': 200, 'balanced_dim': 50, 'mem_input_dim': 200, 'mem_hidden_dim': 20, 'mem_output_dim': 150, 'memory_dim': 6}
+Model memory usage: 395.78 MB
+Total parameters in the model: 103583300
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+MemoryBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=200, bias=True)
+  (we_down): Linear(in_features=100, out_features=50, bias=True)
+  (seq_down): Linear(in_features=200, out_features=50, bias=True)
+  (out_down): Linear(in_features=200, out_features=50, bias=True)
+  (to_mem): Linear(in_features=125000, out_features=200, bias=True)
+  (dim_memory): DimMemory(
+    (linears): ModuleList(
+      (0-4): 5 x Linear(in_features=200, out_features=20, bias=True)
+    )
+    (linear_out): Linear(in_features=20, out_features=150, bias=True)
+  )
+  (out): Linear(in_features=350, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": 100,
+    "word_embed": 100,
+    "sentence_embed": 200,
+    "balanced_dim": 50,
+    "mem_input_dim": 200,
+    "mem_hidden_dim": 20,
+    "mem_output_dim": 150,
+    "memory_dim": 6
+}
+
+Training for 50 epochs...
+
+optimizer set with lr=1e-06
+gradient clipping turned on
+Loaded from 'models/memory_baby_1_trained.pth'
+Epoch took 00:16:41
+Epoch 1/50, mse: 3.5651
+Epoch took 00:16:07
+Epoch 2/50, mse: 3.4625
+Epoch took 00:15:58
+Epoch 3/50, mse: 3.5908
+Epoch took 00:17:29
+Epoch 4/50, mse: 3.6156
+Epoch took 00:16:24
+Epoch 5/50, mse: 3.4945
+Epoch took 00:16:59
+Epoch 6/50, mse: 3.5399
+Epoch took 00:17:13
+Epoch 7/50, mse: 3.7039
+Epoch took 00:16:44
+Epoch 8/50, mse: 3.5511
+Epoch took 00:16:58
+Epoch 9/50, mse: 3.5567
+Epoch took 00:16:10
+Epoch 10/50, mse: 3.6058
+Epoch took 00:18:24
+Epoch 11/50, mse: 3.5551
+Epoch took 00:17:33
+Epoch 12/50, mse: 3.5722
+Epoch took 00:17:49
+Epoch 13/50, mse: 3.5900
+Epoch took 00:17:17
+Epoch 14/50, mse: 3.5162
+Epoch took 00:17:08
+Epoch 15/50, mse: 3.5433
+Epoch took 00:17:20
+Epoch 16/50, mse: 3.5853
+Epoch took 00:17:14
+Epoch 17/50, mse: 3.5107
+Epoch took 00:17:05
+Epoch 18/50, mse: 3.6242
+Epoch took 00:16:55
+Epoch 19/50, mse: 3.5738
+Epoch took 00:18:07
+Epoch 20/50, mse: 3.5743
+Epoch took 00:17:41
+Epoch 21/50, mse: 3.6292
+Epoch took 00:17:51
+Epoch 22/50, mse: 3.5365
+Epoch took 00:17:25
+Epoch 23/50, mse: 3.5639
+Epoch took 00:17:19
+Epoch 24/50, mse: 3.5597
+Epoch took 00:17:06
+Epoch 25/50, mse: 3.6180
+Epoch took 00:16:50
+Epoch 26/50, mse: 3.4485
+Epoch took 00:17:39
+Epoch 27/50, mse: 3.6113
+Epoch took 00:16:42
+Epoch 28/50, mse: 3.6167
+Epoch took 00:17:27
+Epoch 29/50, mse: 3.5587
+Epoch took 00:17:22
+Epoch 30/50, mse: 3.5901
+Epoch took 00:16:34
+Epoch 31/50, mse: 3.5214
+Epoch took 00:17:37
+Epoch 32/50, mse: 3.5657
+Epoch took 00:17:05
+Epoch 33/50, mse: 3.5333
+Epoch took 00:17:04
+Epoch 34/50, mse: 3.5592
+Epoch took 00:17:34
+Epoch 35/50, mse: 3.5805
+Epoch took 00:16:57
+Epoch 36/50, mse: 3.6241
+Epoch took 00:16:31
+Epoch 37/50, mse: 3.4269
+Epoch took 00:17:10
+Epoch 38/50, mse: 3.5502
+Epoch took 00:17:29
+Epoch 39/50, mse: 3.5750
+Epoch took 00:19:14
+Epoch 40/50, mse: 3.6180
+Epoch took 00:17:25
+Epoch 41/50, mse: 3.5284
+Epoch took 00:18:36
+Epoch 42/50, mse: 3.6162
+Epoch took 00:21:06
+Epoch 43/50, mse: 3.6115
+Epoch took 00:19:41
+Epoch 44/50, mse: 3.5782
+Epoch took 00:18:54
+Epoch 45/50, mse: 3.5282
+Epoch took 00:18:45
+Epoch 46/50, mse: 3.5644
+Epoch took 00:19:02
+Epoch 47/50, mse: 3.4086
+Epoch took 00:19:04
+Epoch 48/50, mse: 3.6572
+Epoch took 00:15:52
+Epoch 49/50, mse: 3.4749
+Epoch took 00:12:29
+Epoch 50/50, mse: 3.5747
+Trained model saved to: models/memory_baby_1_trained.pth
+

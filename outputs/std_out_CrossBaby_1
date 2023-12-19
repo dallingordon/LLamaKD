@@ -1,0 +1,1011 @@
+running script
+model_train_CrossBaby_1.sh
+python train.py CrossBaby_1 CrossBab1_1_50.json 100 CPUDoubleFileDataset negativeten_ten CrossBaby_1_50 --lr 0.0001 --clip
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'word_embed': 50}
+Model memory usage: 22.10 MB
+Total parameters in the model: 5792150
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+CrossBaby_1(
+  (word_embedding): Linear(in_features=32000, out_features=50, bias=True)
+  (reduce): Linear(in_features=25600, out_features=50, bias=True)
+  (reduce_2): Linear(in_features=25600, out_features=50, bias=True)
+  (out): Linear(in_features=50, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "word_embed": 50
+}
+
+Training for 100 epochs...
+
+optimizer set with lr=0.0001
+gradient clipping turned on
+Epoch took 00:12:53
+Epoch 1/100, mse: 16.7066
+Epoch took 00:13:17
+Epoch 2/100, mse: 4.5837
+Epoch took 00:13:15
+Epoch 3/100, mse: 3.6865
+Epoch took 00:14:04
+Epoch 4/100, mse: 3.6551
+Epoch took 00:17:33
+Epoch 5/100, mse: 3.5172
+Epoch took 00:18:05
+Epoch 6/100, mse: 3.5549
+Epoch took 00:17:38
+Epoch 7/100, mse: 3.5209
+Epoch took 00:18:06
+Epoch 8/100, mse: 3.5825
+Epoch took 00:18:39
+Epoch 9/100, mse: 3.5981
+Epoch took 00:19:24
+Epoch 10/100, mse: 3.5931
+Epoch took 00:18:24
+Epoch 11/100, mse: 3.4473
+Epoch took 00:18:16
+Epoch 12/100, mse: 3.5034
+Epoch took 00:17:31
+Epoch 13/100, mse: 3.6134
+Epoch took 00:18:59
+Epoch 14/100, mse: 3.6478
+Epoch took 00:16:51
+Epoch 15/100, mse: 3.6128
+Epoch took 00:18:16
+Epoch 16/100, mse: 3.6664
+Epoch took 00:17:08
+Epoch 17/100, mse: 3.6100
+Epoch took 00:18:31
+Epoch 18/100, mse: 3.6655
+Epoch took 00:18:42
+Epoch 19/100, mse: 3.5522
+Epoch took 00:17:14
+Epoch 20/100, mse: 3.5758
+Epoch took 00:18:21
+Epoch 21/100, mse: 3.6179
+Epoch took 00:18:13
+Epoch 22/100, mse: 3.5630
+Epoch took 00:18:15
+Epoch 23/100, mse: 3.4913
+Epoch took 00:17:47
+Epoch 24/100, mse: 3.7059
+Epoch took 00:19:03
+Epoch 25/100, mse: 3.6261
+Epoch took 00:18:42
+Epoch 26/100, mse: 3.6413
+Epoch took 00:18:44
+Epoch 27/100, mse: 3.6046
+Epoch took 00:17:44
+Epoch 28/100, mse: 3.5151
+Epoch took 00:19:16
+Epoch 29/100, mse: 3.5392
+Epoch took 00:18:10
+Epoch 30/100, mse: 3.6070
+Epoch took 00:18:42
+Epoch 31/100, mse: 3.5520
+Epoch took 00:17:57
+Epoch 32/100, mse: 3.5041
+Epoch took 00:17:51
+Epoch 33/100, mse: 3.6061
+Epoch took 00:17:57
+Epoch 34/100, mse: 3.5870
+Epoch took 00:17:53
+Epoch 35/100, mse: 3.6310
+Epoch took 00:17:52
+Epoch 36/100, mse: 3.6294
+Epoch took 00:17:18
+Epoch 37/100, mse: 3.7120
+Epoch took 00:17:18
+Epoch 38/100, mse: 3.6439
+Epoch took 00:18:17
+Epoch 39/100, mse: 3.6085
+Epoch took 00:18:11
+Epoch 40/100, mse: 3.5282
+Epoch took 00:17:31
+Epoch 41/100, mse: 3.6791
+Epoch took 00:18:06
+Epoch 42/100, mse: 3.5064
+Epoch took 00:17:44
+Epoch 43/100, mse: 3.6035
+Epoch took 00:17:38
+Epoch 44/100, mse: 3.6087
+Epoch took 00:18:12
+Epoch 45/100, mse: 3.5651
+Epoch took 00:18:00
+Epoch 46/100, mse: 3.5948
+Epoch took 00:18:00
+Epoch 47/100, mse: 3.5902
+Epoch took 00:17:39
+Epoch 48/100, mse: 3.5782
+Epoch took 00:17:32
+Epoch 49/100, mse: 3.5128
+Epoch took 00:18:12
+Epoch 50/100, mse: 3.5844
+Epoch took 00:18:01
+Epoch 51/100, mse: 3.6139
+Epoch took 00:17:32
+Epoch 52/100, mse: 3.5886
+Epoch took 00:17:47
+Epoch 53/100, mse: 3.5850
+Epoch took 00:18:03
+Epoch 54/100, mse: 3.6411
+Epoch took 00:19:06
+Epoch 55/100, mse: 3.6318
+Epoch took 00:18:06
+Epoch 56/100, mse: 3.5902
+Epoch took 00:18:39
+Epoch 57/100, mse: 3.5996
+Epoch took 00:17:51
+Epoch 58/100, mse: 3.5982
+Epoch took 00:18:17
+Epoch 59/100, mse: 3.6687
+Epoch took 00:18:44
+Epoch 60/100, mse: 3.5820
+Epoch took 00:17:48
+Epoch 61/100, mse: 3.5920
+Epoch took 00:18:31
+Epoch 62/100, mse: 3.5661
+Epoch took 00:18:32
+Epoch 63/100, mse: 3.5086
+Epoch took 00:19:19
+Epoch 64/100, mse: 3.5292
+Epoch took 00:17:45
+Epoch 65/100, mse: 3.5392
+Epoch took 00:16:38
+Epoch 66/100, mse: 3.5040
+Epoch took 00:17:11
+Epoch 67/100, mse: 3.5779
+Epoch took 00:18:00
+Epoch 68/100, mse: 3.5492
+Epoch took 00:17:59
+Epoch 69/100, mse: 3.6025
+Epoch took 00:17:17
+Epoch 70/100, mse: 3.5857
+Epoch took 00:18:04
+Epoch 71/100, mse: 3.5264
+Epoch took 00:18:23
+Epoch 72/100, mse: 3.5783
+Epoch took 00:18:40
+Epoch 73/100, mse: 3.5993
+Epoch took 00:18:25
+Epoch 74/100, mse: 3.5361
+Epoch took 00:17:54
+Epoch 75/100, mse: 3.5904
+Epoch took 00:17:20
+Epoch 76/100, mse: 3.4653
+Epoch took 00:18:14
+Epoch 77/100, mse: 3.6115
+Epoch took 00:17:20
+Epoch 78/100, mse: 3.6129
+Epoch took 00:18:04
+Epoch 79/100, mse: 3.5971
+Epoch took 00:18:00
+Epoch 80/100, mse: 3.5919
+Epoch took 00:19:10
+Epoch 81/100, mse: 3.5965
+Epoch took 00:17:40
+Epoch 82/100, mse: 3.5706
+Epoch took 00:18:24
+Epoch 83/100, mse: 3.4840
+Epoch took 00:18:33
+Epoch 84/100, mse: 3.5622
+Epoch took 00:18:29
+Epoch 85/100, mse: 3.6427
+Epoch took 00:17:22
+Epoch 86/100, mse: 3.5357
+Epoch took 00:18:40
+Epoch 87/100, mse: 3.5883
+Epoch took 00:18:01
+Epoch 88/100, mse: 3.5303
+Epoch took 00:17:33
+Epoch 89/100, mse: 3.5924
+Epoch took 00:17:53
+Epoch 90/100, mse: 3.5868
+Epoch took 00:17:29
+Epoch 91/100, mse: 3.6253
+Epoch took 00:18:00
+Epoch 92/100, mse: 3.5871
+Epoch took 00:18:22
+Epoch 93/100, mse: 3.6228
+Epoch took 00:17:37
+Epoch 94/100, mse: 3.6791
+Epoch took 00:19:05
+Epoch 95/100, mse: 3.5874
+Epoch took 00:17:09
+Epoch 96/100, mse: 3.5923
+Epoch took 00:17:13
+Epoch 97/100, mse: 3.5590
+Epoch took 00:18:09
+Epoch 98/100, mse: 3.5812
+Epoch took 00:18:31
+Epoch 99/100, mse: 3.5666
+running script
+model_train_CrossBaby_1.sh
+python train.py CrossBaby_1 CrossBab1_1_50.json 100 CPUDoubleFileDataset negativeten_ten CrossBaby_1_50 --lr 0.0001 --clip
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'word_embed': 50}
+Model memory usage: 22.10 MB
+Total parameters in the model: 5792150
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+CrossBaby_1(
+  (word_embedding): Linear(in_features=32000, out_features=50, bias=True)
+  (reduce): Linear(in_features=25600, out_features=50, bias=True)
+  (reduce_2): Linear(in_features=25600, out_features=50, bias=True)
+  (out): Linear(in_features=50, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "word_embed": 50
+}
+
+Training for 50 epochs...
+
+optimizer set with lr=1e-06
+gradient clipping turned on
+Loaded from 'models/CrossBaby_1_50_trained.pth'
+Epoch took 00:12:06
+Epoch 1/50, mse: 3.5093
+Epoch took 00:12:37
+Epoch 2/50, mse: 3.5474
+Epoch took 00:12:19
+Epoch 3/50, mse: 3.6408
+Epoch took 00:13:04
+Epoch 4/50, mse: 3.5640
+Epoch took 00:12:01
+Epoch 5/50, mse: 3.5534
+Epoch took 00:11:50
+Epoch 6/50, mse: 3.5373
+Epoch took 00:12:23
+Epoch 7/50, mse: 3.5127
+Epoch took 00:12:27
+Epoch 8/50, mse: 3.6922
+Epoch took 00:11:50
+Epoch 9/50, mse: 3.5892
+Epoch took 00:13:15
+Epoch 10/50, mse: 3.5797
+Epoch took 00:12:02
+Epoch 11/50, mse: 3.5976
+Epoch took 00:11:56
+Epoch 12/50, mse: 3.5895
+Epoch took 00:11:22
+Epoch 13/50, mse: 3.5930
+Epoch took 00:12:16
+Epoch 14/50, mse: 3.5575
+Epoch took 00:13:01
+Epoch 15/50, mse: 3.5558
+Epoch took 00:12:35
+Epoch 16/50, mse: 3.5948
+Epoch took 00:11:43
+Epoch 17/50, mse: 3.5278
+Epoch took 00:12:13
+Epoch 18/50, mse: 3.5229
+Epoch took 00:11:36
+Epoch 19/50, mse: 3.5279
+Epoch took 00:12:44
+Epoch 20/50, mse: 3.5325
+Epoch took 00:12:42
+Epoch 21/50, mse: 3.5627
+Epoch took 00:11:39
+Epoch 22/50, mse: 3.5849
+Epoch took 00:11:47
+Epoch 23/50, mse: 3.4919
+Epoch took 00:11:52
+Epoch 24/50, mse: 3.5700
+Epoch took 00:12:38
+Epoch 25/50, mse: 3.6044
+Epoch took 00:13:15
+Epoch 26/50, mse: 3.5618
+Epoch took 00:12:25
+Epoch 27/50, mse: 3.5436
+Epoch took 00:11:57
+Epoch 28/50, mse: 3.6263
+Epoch took 00:11:46
+Epoch 29/50, mse: 3.4687
+Epoch took 00:12:26
+Epoch 30/50, mse: 3.6130
+Epoch took 00:12:53
+Epoch 31/50, mse: 3.5102
+Epoch took 00:13:13
+Epoch 32/50, mse: 3.5407
+Epoch took 00:11:54
+Epoch 33/50, mse: 3.6378
+Epoch took 00:11:30
+Epoch 34/50, mse: 3.6179
+Epoch took 00:12:31
+Epoch 35/50, mse: 3.6122
+Epoch took 00:12:10
+Epoch 36/50, mse: 3.5981
+Epoch took 00:12:41
+Epoch 37/50, mse: 3.4921
+Epoch took 00:12:26
+Epoch 38/50, mse: 3.6277
+Epoch took 00:11:37
+Epoch 39/50, mse: 3.5819
+Epoch took 00:11:54
+Epoch 40/50, mse: 3.6275
+Epoch took 00:12:42
+Epoch 41/50, mse: 3.6660
+Epoch took 00:13:17
+Epoch 42/50, mse: 3.5758
+Epoch took 00:12:17
+Epoch 43/50, mse: 3.6402
+Epoch took 00:12:08
+Epoch 44/50, mse: 3.6157
+Epoch took 00:11:47
+Epoch 45/50, mse: 3.5626
+Epoch took 00:11:30
+Epoch 46/50, mse: 3.6233
+Epoch took 00:11:35
+Epoch 47/50, mse: 3.6502
+Epoch took 00:11:54
+Epoch 48/50, mse: 3.6147
+Epoch took 00:11:56
+Epoch 49/50, mse: 3.5932
+Epoch took 00:11:47
+Epoch 50/50, mse: 3.6564
+Trained model saved to: models/CrossBaby_1_50_trained.pth
+
+running script
+model_train_CrossBaby_1.sh
+python train.py CrossBaby_1 CrossBab1_1_50.json 50 CPUDoubleFileDataset negativeten_ten CrossBaby_1_50 --lr 0.000001 --clip
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'word_embed': 50}
+Model memory usage: 22.10 MB
+Total parameters in the model: 5792150
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+CrossBaby_1(
+  (word_embedding): Linear(in_features=32000, out_features=50, bias=True)
+  (reduce): Linear(in_features=25600, out_features=50, bias=True)
+  (reduce_2): Linear(in_features=25600, out_features=50, bias=True)
+  (out): Linear(in_features=50, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "word_embed": 50
+}
+
+Training for 50 epochs...
+
+optimizer set with lr=1e-06
+gradient clipping turned on
+Epoch took 00:11:49
+Epoch 1/50, mse: 116.1795
+Epoch took 00:12:00
+Epoch 2/50, mse: 119.8646
+Epoch took 00:12:26
+Epoch 3/50, mse: 119.0696
+Epoch took 00:11:49
+Epoch 4/50, mse: 122.3697
+Epoch took 00:11:47
+Epoch 5/50, mse: 107.7631
+Epoch took 00:11:53
+Epoch 6/50, mse: 108.6197
+Epoch took 00:11:51
+Epoch 7/50, mse: 102.0549
