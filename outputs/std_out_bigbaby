@@ -1,0 +1,1047 @@
+running script
+python train.py LlamaBaby fetus_config_large_1.json 20 CPUDoubleFileDataset negativeten_ten big_baby_10 --lr 0.0001
+model_train_bigbaby.sh
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': None, 'word_embed': 100, 'sentence_embed': 1000, 'balanced_dim': 20}
+Model memory usage: 991.01 MB
+Total parameters in the model: 259787160
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+LlamaBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=1000, bias=True)
+  (we_down): Linear(in_features=100, out_features=20, bias=True)
+  (seq_down): Linear(in_features=1000, out_features=20, bias=True)
+  (out_down): Linear(in_features=1000, out_features=20, bias=True)
+  (out): Linear(in_features=8000, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": null,
+    "word_embed": 100,
+    "sentence_embed": 1000,
+    "balanced_dim": 20
+}
+
+Training for 20 epochs...
+
+optimizer set with lr=0.0001
+Epoch took 00:17:57
+Epoch 1/20, mse: 3.5262
+Epoch took 00:16:56
+Epoch 2/20, mse: 3.5432
+Epoch took 00:16:59
+Epoch 3/20, mse: 3.4601
+Epoch took 00:16:57
+Epoch 4/20, mse: 3.5727
+Epoch took 00:18:23
+Epoch 5/20, mse: 3.6542
+Epoch took 00:15:59
+Epoch 6/20, mse: 3.6207
+Epoch took 00:13:36
+Epoch 7/20, mse: 3.6310
+Epoch took 00:13:40
+Epoch 8/20, mse: 3.5456
+Epoch took 00:14:08
+Epoch 9/20, mse: 3.5946
+Epoch took 00:14:14
+Epoch 10/20, mse: 3.5743
+Epoch took 00:14:04
+Epoch 11/20, mse: 3.6340
+Epoch took 00:14:15
+Epoch 12/20, mse: 3.5309
+Epoch took 00:14:31
+Epoch 13/20, mse: 3.5933
+Epoch took 00:14:35
+Epoch 14/20, mse: 3.6163
+Epoch took 00:14:10
+Epoch 15/20, mse: 3.5842
+Epoch took 00:13:40
+Epoch 16/20, mse: 3.6039
+Epoch took 00:14:06
+Epoch 17/20, mse: 3.4363
+Epoch took 00:13:43
+Epoch 18/20, mse: 3.5726
+Epoch took 00:13:39
+Epoch 19/20, mse: 3.5314
+Epoch took 00:13:31
+Epoch 20/20, mse: 3.5791
+Trained model saved to: models/big_baby_10_trained.pth
+
+running script
+python train.py LlamaBaby fetus_config_large_1.json 20 CPUDoubleFileDataset negativeten_ten big_baby_10 --lr 0.0001
+model_train_bigbaby.sh
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': None, 'word_embed': 100, 'sentence_embed': 1000, 'balanced_dim': 20}
+Model memory usage: 991.01 MB
+Total parameters in the model: 259787160
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+LlamaBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=1000, bias=True)
+  (we_down): Linear(in_features=100, out_features=20, bias=True)
+  (seq_down): Linear(in_features=1000, out_features=20, bias=True)
+  (out_down): Linear(in_features=1000, out_features=20, bias=True)
+  (out): Linear(in_features=8000, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": null,
+    "word_embed": 100,
+    "sentence_embed": 1000,
+    "balanced_dim": 20
+}
+
+Training for 100 epochs...
+
+optimizer set with lr=1e-05
+Loaded from 'models/big_baby_10_trained.pth'
+Epoch took 00:14:09
+Epoch 1/100, mse: 3.5028
+Epoch took 00:14:14
+Epoch 2/100, mse: 3.5790
+Epoch took 00:14:07
+Epoch 3/100, mse: 3.5530
+Epoch took 00:14:03
+Epoch 4/100, mse: 3.5287
+Epoch took 00:14:08
+Epoch 5/100, mse: 3.6372
+Epoch took 00:14:07
+Epoch 6/100, mse: 3.6551
+Epoch took 00:13:41
+Epoch 7/100, mse: 3.7056
+Epoch took 00:13:18
+Epoch 8/100, mse: 3.5084
+Epoch took 00:13:15
+Epoch 9/100, mse: 3.5800
+Epoch took 00:13:10
+Epoch 10/100, mse: 3.5004
+Epoch took 00:13:16
+Epoch 11/100, mse: 3.5743
+Epoch took 00:13:15
+Epoch 12/100, mse: 3.5339
+Epoch took 00:13:09
+Epoch 13/100, mse: 3.6360
+Epoch took 00:13:20
+Epoch 14/100, mse: 3.5807
+Epoch took 00:13:14
+Epoch 15/100, mse: 3.5924
+Epoch took 00:13:06
+Epoch 16/100, mse: 3.4669
+Epoch took 00:13:30
+Epoch 17/100, mse: 3.5892
+Epoch took 00:13:05
+Epoch 18/100, mse: 3.5518
+Epoch took 00:13:22
+Epoch 19/100, mse: 3.6204
+Epoch took 00:13:26
+Epoch 20/100, mse: 3.6673
+Epoch took 00:13:13
+Epoch 21/100, mse: 3.6506
+Epoch took 00:13:14
+Epoch 22/100, mse: 3.5537
+Epoch took 00:13:15
+Epoch 23/100, mse: 3.4218
+Epoch took 00:13:13
+Epoch 24/100, mse: 3.5536
+Epoch took 00:13:15
+Epoch 25/100, mse: 3.4601
+Epoch took 00:13:14
+Epoch 26/100, mse: 3.6167
+Epoch took 00:13:16
+Epoch 27/100, mse: 3.5009
+Epoch took 00:13:09
+Epoch 28/100, mse: 3.5904
+Epoch took 00:13:07
+Epoch 29/100, mse: 3.5972
+Epoch took 00:13:14
+Epoch 30/100, mse: 3.5856
+Epoch took 00:13:20
+Epoch 31/100, mse: 3.4847
+Epoch took 00:13:11
+Epoch 32/100, mse: 3.6060
+Epoch took 00:13:33
+Epoch 33/100, mse: 3.5473
+Epoch took 00:13:21
+Epoch 34/100, mse: 3.5856
+Epoch took 00:13:25
+Epoch 35/100, mse: 3.5657
+Epoch took 00:13:11
+Epoch 36/100, mse: 3.5626
+Epoch took 00:13:17
+Epoch 37/100, mse: 3.5215
+Epoch took 00:13:16
+Epoch 38/100, mse: 3.6093
+Epoch took 00:13:24
+Epoch 39/100, mse: 3.5347
+Epoch took 00:13:31
+Epoch 40/100, mse: 3.5674
+Epoch took 00:13:37
+Epoch 41/100, mse: 3.5770
+Epoch took 00:13:33
+Epoch 42/100, mse: 3.5848
+Epoch took 00:13:55
+Epoch 43/100, mse: 3.7214
+Epoch took 00:13:34
+Epoch 44/100, mse: 3.5205
+Epoch took 00:13:43
+Epoch 45/100, mse: 3.5824
+Epoch took 00:14:17
+Epoch 46/100, mse: 3.5378
+Epoch took 00:14:21
+Epoch 47/100, mse: 3.6590
+Epoch took 00:13:52
+Epoch 48/100, mse: 3.6288
+Epoch took 00:13:44
+Epoch 49/100, mse: 3.4695
+Epoch took 00:13:25
+Epoch 50/100, mse: 3.5324
+Epoch took 00:13:32
+Epoch 51/100, mse: 3.4586
+Epoch took 00:13:38
+Epoch 52/100, mse: 3.5814
+Epoch took 00:13:41
+Epoch 53/100, mse: 3.6588
+Epoch took 00:13:28
+Epoch 54/100, mse: 3.5895
+Epoch took 00:13:45
+Epoch 55/100, mse: 3.6650
+Epoch took 00:13:28
+Epoch 56/100, mse: 3.5631
+Epoch took 00:13:29
+Epoch 57/100, mse: 3.5129
+Epoch took 00:14:01
+Epoch 58/100, mse: 3.6476
+Epoch took 00:13:29
+Epoch 59/100, mse: 3.6452
+Epoch took 00:13:44
+Epoch 60/100, mse: 3.5721
+Epoch took 00:13:29
+Epoch 61/100, mse: 3.5733
+Epoch took 00:13:50
+Epoch 62/100, mse: 3.5607
+Epoch took 00:13:54
+Epoch 63/100, mse: 3.6076
+Epoch took 00:13:31
+Epoch 64/100, mse: 3.5438
+Epoch took 00:13:27
+Epoch 65/100, mse: 3.5345
+Epoch took 00:13:36
+Epoch 66/100, mse: 3.5555
+Epoch took 00:13:22
+Epoch 67/100, mse: 3.4986
+Epoch took 00:13:22
+Epoch 68/100, mse: 3.5954
+Epoch took 00:13:27
+Epoch 69/100, mse: 3.4816
+Epoch took 00:13:36
+Epoch 70/100, mse: 3.5888
+Epoch took 00:13:26
+Epoch 71/100, mse: 3.6765
+Epoch took 00:13:31
+Epoch 72/100, mse: 3.5583
+Epoch took 00:13:21
+Epoch 73/100, mse: 3.5522
+Epoch took 00:13:25
+Epoch 74/100, mse: 3.5777
+Epoch took 00:13:28
+Epoch 75/100, mse: 3.6336
+Epoch took 00:13:33
+Epoch 76/100, mse: 3.6314
+Epoch took 00:13:23
+Epoch 77/100, mse: 3.6439
+Epoch took 00:13:20
+Epoch 78/100, mse: 3.6302
+Epoch took 00:13:19
+Epoch 79/100, mse: 3.5735
+Epoch took 00:13:33
+Epoch 80/100, mse: 3.6427
+Epoch took 00:13:34
+Epoch 81/100, mse: 3.5495
+Epoch took 00:13:31
+Epoch 82/100, mse: 3.4698
+Epoch took 00:13:18
+Epoch 83/100, mse: 3.4988
+Epoch took 00:13:39
+Epoch 84/100, mse: 3.5041
+Epoch took 00:13:23
+Epoch 85/100, mse: 3.5105
+Epoch took 00:13:46
+Epoch 86/100, mse: 3.5266
+Epoch took 00:13:24
+Epoch 87/100, mse: 3.6236
+running script
+python train.py LlamaBaby fetus_config_large_1.json 20 CPUDoubleFileDataset negativeten_ten big_baby_10 --lr 0.0001
+model_train_bigbaby.sh
+Loading Modules LLAMA
+/projectnb/textconv/llama/packages
+all done
+cuda will be used to train
+model kwargs loaded:
+{'vocab_size': 32000, 'sequence_length': 512, 'hidden_dim': None, 'word_embed': 100, 'sentence_embed': 1000, 'balanced_dim': 20}
+Model memory usage: 991.01 MB
+Total parameters in the model: 259787160
+4
+115
+153
+124
+98
+73
+3
+17
+66
+121
+133
+128
+189
+174
+172
+149
+14
+177
+148
+8
+69
+193
+110
+37
+99
+97
+165
+75
+116
+191
+151
+141
+164
+135
+94
+139
+119
+104
+68
+62
+58
+26
+43
+39
+57
+155
+64
+32
+42
+170
+9
+86
+55
+54
+93
+29
+175
+7
+28
+138
+35
+79
+52
+13
+197
+169
+136
+85
+63
+23
+45
+81
+27
+102
+59
+83
+70
+51
+186
+198
+74
+163
+108
+56
+146
+187
+192
+11
+101
+179
+16
+162
+166
+15
+111
+49
+160
+2
+92
+156
+109
+44
+46
+180
+178
+34
+127
+50
+21
+91
+150
+157
+147
+137
+126
+33
+158
+154
+152
+60
+5
+105
+159
+88
+89
+167
+145
+194
+48
+38
+125
+103
+184
+10
+123
+122
+143
+118
+129
+190
+185
+161
+77
+24
+47
+0
+112
+71
+53
+1
+87
+76
+96
+12
+82
+171
+22
+67
+130
+106
+199
+176
+142
+72
+41
+113
+95
+144
+31
+132
+100
+61
+20
+114
+19
+107
+65
+117
+40
+140
+181
+196
+25
+173
+84
+6
+120
+36
+182
+80
+183
+195
+134
+18
+30
+168
+188
+78
+90
+131
+Training on 200 file(s) and 20000 sample(s).
+Model memory usage: 0.00 MB
+Model Architecture:
+LlamaBaby(
+  (word_embedding): Linear(in_features=32000, out_features=100, bias=True)
+  (sentence_embedding): Linear(in_features=512, out_features=1000, bias=True)
+  (we_down): Linear(in_features=100, out_features=20, bias=True)
+  (seq_down): Linear(in_features=1000, out_features=20, bias=True)
+  (out_down): Linear(in_features=1000, out_features=20, bias=True)
+  (out): Linear(in_features=8000, out_features=32000, bias=True)
+)
+
+Model Hyperparameters:
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": null,
+    "word_embed": 100,
+    "sentence_embed": 1000,
+    "balanced_dim": 20
+}
+
+Training for 100 epochs...
+
+optimizer set with lr=1e-06
+gradient clipping turned on
+Loaded from 'models/big_baby_10_trained.pth'
+Epoch took 00:13:13
+Epoch 1/100, mse: 3.5068
+Epoch took 00:13:35
+Epoch 2/100, mse: 3.5928
+Epoch took 00:13:33
+Epoch 3/100, mse: 3.5832
+Epoch took 00:13:34
+Epoch 4/100, mse: 3.4968
+Epoch took 00:13:26
+Epoch 5/100, mse: 3.5977
+Epoch took 00:13:38
+Epoch 6/100, mse: 3.5931
+Epoch took 00:13:35
+Epoch 7/100, mse: 3.5536
+Epoch took 00:13:33
+Epoch 8/100, mse: 3.5862
+Epoch took 00:13:40
+Epoch 9/100, mse: 3.5581
+Epoch took 00:13:38
+Epoch 10/100, mse: 3.6676
+Epoch took 00:13:30
+Epoch 11/100, mse: 3.6236
+Epoch took 00:13:41
+Epoch 12/100, mse: 3.5264
+Epoch took 00:13:34
+Epoch 13/100, mse: 3.5117
+Epoch took 00:13:33
+Epoch 14/100, mse: 3.5542
+Epoch took 00:13:09
+Epoch 15/100, mse: 3.5300
+Epoch took 00:12:59
+Epoch 16/100, mse: 3.6234
+Epoch took 00:13:04
+Epoch 17/100, mse: 3.5684
+Epoch took 00:13:02
+Epoch 18/100, mse: 3.4744
+Epoch took 00:13:03
+Epoch 19/100, mse: 3.4927
+Epoch took 00:13:17
+Epoch 20/100, mse: 3.6276
+Epoch took 00:13:25
+Epoch 21/100, mse: 3.5820
+Epoch took 00:13:06
+Epoch 22/100, mse: 3.4854
+Epoch took 00:13:04
+Epoch 23/100, mse: 3.5450
+Epoch took 00:13:32
+Epoch 24/100, mse: 3.5425
+Epoch took 00:13:14
+Epoch 25/100, mse: 3.5771
+Epoch took 00:13:30
+Epoch 26/100, mse: 3.5425
+Epoch took 00:13:28
+Epoch 27/100, mse: 3.6270
+Epoch took 00:13:53
+Epoch 28/100, mse: 3.5809
+Epoch took 00:13:19
+Epoch 29/100, mse: 3.6044
+Epoch took 00:13:24
+Epoch 30/100, mse: 3.6004
+Epoch took 00:13:19
+Epoch 31/100, mse: 3.5284
+Epoch took 00:13:20
+Epoch 32/100, mse: 3.6402
+Epoch took 00:13:26
+Epoch 33/100, mse: 3.5023
+Epoch took 00:13:28
+Epoch 34/100, mse: 3.5242
+Epoch took 00:13:33
+Epoch 35/100, mse: 3.6678
+Epoch took 00:13:31
+Epoch 36/100, mse: 3.5952
+Epoch took 00:13:17
+Epoch 37/100, mse: 3.6014
+Epoch took 00:13:15
+Epoch 38/100, mse: 3.5187
+Epoch took 00:13:31
+Epoch 39/100, mse: 3.5420
+Epoch took 00:13:27
+Epoch 40/100, mse: 3.6189
+Epoch took 00:13:27
+Epoch 41/100, mse: 3.5400
+Epoch took 00:13:37
+Epoch 42/100, mse: 3.6092
+Epoch took 00:14:12
+Epoch 43/100, mse: 3.6350
+Epoch took 00:14:04
+Epoch 44/100, mse: 3.5774
+Epoch took 00:13:40
+Epoch 45/100, mse: 3.6320
+Epoch took 00:13:41
+Epoch 46/100, mse: 3.5454
+Epoch took 00:13:36
+Epoch 47/100, mse: 3.5715
+Epoch took 00:13:24
+Epoch 48/100, mse: 3.5787
+Epoch took 00:13:20
+Epoch 49/100, mse: 3.6707
+Epoch took 00:13:15
+Epoch 50/100, mse: 3.6754
+Epoch took 00:13:23
+Epoch 51/100, mse: 3.5472
+Epoch took 00:13:32
+Epoch 52/100, mse: 3.5182
+Epoch took 00:13:21
+Epoch 53/100, mse: 3.6732
+Epoch took 00:13:48
+Epoch 54/100, mse: 3.5640
+Epoch took 00:14:00
+Epoch 55/100, mse: 3.5310
+Epoch took 00:13:57
+Epoch 56/100, mse: 3.6667
+Epoch took 00:13:54
+Epoch 57/100, mse: 3.5758
+Epoch took 00:13:54
+Epoch 58/100, mse: 3.6331
+Epoch took 00:13:43
+Epoch 59/100, mse: 3.4703
+Epoch took 00:13:19
+Epoch 60/100, mse: 3.7167
