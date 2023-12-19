@@ -1,0 +1,8 @@
+{
+    "vocab_size": 32000,
+    "sequence_length": 512,
+    "hidden_dim": 128,
+    "word_embed": 51,
+    "sentence_embed": 54,
+    "balanced_dim": 10
+}
