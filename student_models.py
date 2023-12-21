@@ -385,3 +385,116 @@ class CrossBaby_2(nn.Module):
         d = F.relu(self.out_1(d))
         d = self.out_2(d)
         return d
+    
+class SquareMemory(nn.Module):
+    def __init__(self,input_dim, memory_dim):
+        super(SquareMemory, self).__init__()
+        
+        self.mem = nn.Parameter(torch.randn(memory_dim,memory_dim))
+        self.mem.requires_grad = True
+        
+        
+
+        # Create the final linear layer for output
+        self.first_axis = nn.Linear(input_dim, memory_dim)
+        self.second_axis = nn.Linear(input_dim, memory_dim)
+        self.intercept = nn.Linear(input_dim,memory_dim)
+
+    def forward(self, input1):
+        #batch_dim = input1.shape[0]
+        #print(batch_dim)
+        first = F.softmax(self.first_axis(input1), dim=-1)
+        first = torch.matmul(first, self.mem) #first is used as the lookup, picks a row with the softmax
+        
+        second = F.relu(self.second_axis(input1))
+        
+        x = second * first
+        
+        intercept = F.relu(self.intercept(input1))
+        x = x + intercept
+        return x
+    
+    
+class SMCrossBaby_1(nn.Module):
+    """This flattens everything at the end so you have balanced_dim ** 3 in the second to last layer"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                 , memory_dim
+                ):
+        super(SMCrossBaby_1, self).__init__()
+        
+        self.mem = SquareMemory(word_embed,memory_dim)
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed)
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed,self.word_embed)
+        
+        
+        
+        self.out = nn.Linear(memory_dim,self.vocab_size)
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape)
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        #print(x.shape, "after reduce")
+        x = x.reshape(x.shape[0],-1)
+        #print(x.shape, "after reshape 2")
+        x = F.relu(self.reduce_2(x))
+        #print(x.shape,"after reduce_2")
+        x = self.mem(x)
+        #print(x.shape, "memory")
+        x = self.out(x)
+        return x
+    
+class SMCrossBaby_Concat(nn.Module):
+
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                 , memory_dim
+                ):
+        super(SMCrossBaby_Concat, self).__init__()
+        
+        self.mem = SquareMemory(word_embed,memory_dim)
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed)
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed,self.word_embed)
+        self.conc = nn.Linear(self.sequence_length*self.word_embed,memory_dim)
+        
+        
+        self.out = nn.Linear(memory_dim*2,self.vocab_size)
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape)
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        #print(x.shape, "after reduce")
+        x = x.reshape(x.shape[0],-1)
+        #print(x.shape, "after reshape 2")
+        c = F.relu(self.conc(x))
+        x = F.relu(self.reduce_2(x))
+        #print(x.shape,"after reduce_2")
+        x = self.mem(x)
+        x = torch.concat((x, c), dim = -1)
+        #print(x.shape, 'after concat')
+        x = self.out(x)
+        return x
