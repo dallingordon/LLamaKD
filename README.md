@@ -19,8 +19,13 @@ The next two integers are the range for the random noise inputs, in this case fl
 'negativeten_ten' is the name of the dataset, it will make a folder under /generated_datasets by this name, and store the input and output tensors there.  
 This is specified in the train call.  The final float is between 0 and 1 and is the percentage of the input data that should be the full sequence length.  in this case, half will be full, the rest will be random lengths less than the max_seq_len. 
 
-data generating .sh files are in /generation_scripts.
+Pre-training on random indexes is accomplished with llama_idx_data_gen.py:
 
+```python llama_idx_data_gen.py 200 100 idx_pretrain```
+
+These generate full input length sequences of random token indexes.  Since these are stored as indexes, a separate dataloader that turns these into one-hot float tensors is used.    
+
+Data generating .sh files are in /generation_scripts.
 # Training
 train.py Trains models.  It is executed from the command line:
 ```python train.py CrossBaby_1 CrossBab1_1_50.json 50 CPUDoubleFileDataset negativeten_ten CrossBaby_1_50 --lr 0.000001 --clip --resume```
