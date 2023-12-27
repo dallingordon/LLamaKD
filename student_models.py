@@ -498,3 +498,91 @@ class SMCrossBaby_Concat(nn.Module):
         #print(x.shape, 'after concat')
         x = self.out(x)
         return x
+    
+class DoubleCrossBaby(nn.Module):
+    """2 interactions in the embedding space.  then sums.  that sum could be learned?"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                ):
+        super(DoubleCrossBaby, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        
+        self.up_1 = nn.Linear(self.word_embed*5, self.word_embed*10)
+        self.up_2 = nn.Linear(self.word_embed*10,self.vocab_size)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape)
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        #print(x.shape, "after reduce")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        #print(x.shape, "second reduce")
+        x = F.relu(self.up_1(x))
+        #print(x.shape, "up_1")
+        x = F.relu(self.up_2(x))
+        #print(x.shape,"up_2")
+        x = torch.sum(x, dim=1)
+        #print(x.shape)
+        return x
+    
+class LearnedDoubleCrossBaby(nn.Module):
+    """2 interactions in the embedding space.  leanred vocab agg"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                ):
+        super(LearnedDoubleCrossBaby, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        
+        self.up_1 = nn.Linear(self.word_embed*5, self.word_embed*10)
+        self.up_2 = nn.Linear(self.word_embed*10,self.vocab_size)
+        self.final = nn.Linear(self.sequence_length, 1)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape)
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        #print(x.shape, "after reduce")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        #print(x.shape, "second reduce")
+        x = F.relu(self.up_1(x))
+        #print(x.shape, "up_1")
+        x = F.relu(self.up_2(x))
+        #print(x.shape,"up_2")
+        x = x.transpose(1, 2)
+        x = F.relu(self.final(x))
+        x = x.squeeze(-1)
+        return x
