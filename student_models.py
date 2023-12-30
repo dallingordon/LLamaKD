@@ -586,3 +586,111 @@ class LearnedDoubleCrossBaby(nn.Module):
         x = F.relu(self.final(x))
         x = x.squeeze(-1)
         return x
+    
+def int_to_binary_tensor(number, max_length):
+
+    binary_string = bin(number)[2:]  # Convert to binary and remove the '0b' prefix.
+    same_len = binary_string.zfill(max_length)
+    seperated =torch.tensor([float(i) for i in same_len])
+    return seperated
+def create_binary_tensor(input_length):
+    max_length = math.ceil(math.log2(input_length + 1))
+    binary_tensors = []
+
+    # Iterate through numbers from 1 to input_length
+    for number in range(1, input_length + 1):
+        binary_tensor = int_to_binary_tensor(number, max_length)
+        #print(binary_tensor.shape)
+        binary_tensors.append(binary_tensor)
+        
+    # Stack the binary tensors to form a 2D tensor
+    stacked_tensor = torch.stack(binary_tensors)
+
+    return stacked_tensor
+
+def binary_self_interactions(input_length):
+    stacked_tensor = create_binary_tensor(input_length)
+    res = torch.zeros((stacked_tensor.shape[0],stacked_tensor.shape[1]**2))
+    
+    for i in range(stacked_tensor.shape[0]):
+        res[i, :] = torch.outer(stacked_tensor[i],stacked_tensor[i]).flatten()
+    return res
+
+class BinaryPositionalEmbedding(nn.Module):
+    def __init__(self, max_len, embedding_dim):
+        super(BinaryPositionalEmbedding, self).__init__()
+        
+        self.positional_input = binary_self_interactions(max_len)
+        
+        # Determine positional_emb_dim from positional_input
+        positional_emb_dim = self.positional_input.shape[1]
+        
+        # Linear layer with input size of positional_emb_dim and output size of embedding_dim
+        self.linear = nn.Linear(positional_emb_dim, embedding_dim)
+
+    def forward(self, x):
+        batch_size = x.shape[0]
+        # Apply the linear layer to each position
+        x_add = self.linear(self.positional_input)
+        x_add = x_add.unsqueeze(0).repeat(batch_size, 1, 1)
+        
+        
+        return x + x_add
+
+
+class LearnedDoubleCrossBabyWithBinaryEmbedding(nn.Module):
+    """2 interactions in the embedding space.  then sums.  that sum could be learned?"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                ):
+        super(LearnedDoubleCrossBabyWithBinaryEmbedding, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.word_pos_emb = BinaryPositionalEmbedding(self.sequence_length,self.word_embed)
+        
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = BinaryPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = BinaryPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.up_1 = nn.Linear(self.word_embed*5, self.word_embed*10)
+        self.up_2 = nn.Linear(self.word_embed*10,self.vocab_size)
+        self.final = nn.Linear(self.sequence_length, 1)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.up_1(x))
+        #print(x.shape, "up_1")
+        x = F.relu(self.up_2(x))
+        #print(x.shape,"up_2")
+        x = x.transpose(1, 2)
+        x = F.relu(self.final(x))
+        x = x.squeeze(-1)
+        return x
