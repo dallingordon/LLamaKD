@@ -629,9 +629,11 @@ class BinaryPositionalEmbedding(nn.Module):
         self.linear = nn.Linear(positional_emb_dim, embedding_dim)
 
     def forward(self, x):
+        
         batch_size = x.shape[0]
         # Apply the linear layer to each position
-        x_add = self.linear(self.positional_input)
+        x_add = F.relu(self.linear(self.positional_input))
+        
         x_add = x_add.unsqueeze(0).repeat(batch_size, 1, 1)
         
         
@@ -668,6 +670,7 @@ class LearnedDoubleCrossBabyWithBinaryEmbedding(nn.Module):
         x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
         #print(x.shape, "first embedding")
         #add pos emb here
+        #print(x.device)
         x = self.word_pos_emb(x)
         #print(x.shape, "after embedding")
         x = torch.einsum('bij,bkm->bikj', x, x)
@@ -693,4 +696,475 @@ class LearnedDoubleCrossBabyWithBinaryEmbedding(nn.Module):
         x = x.transpose(1, 2)
         x = F.relu(self.final(x))
         x = x.squeeze(-1)
+        return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self
+    
+def getPositionEncoding(seq_len, d, n=10000):
+    P = torch.zeros((seq_len, d))
+    for k in range(seq_len):
+        for i in range(int(d / 2)):
+            denominator = torch.pow(torch.tensor(n, dtype=torch.float32), 2 * i / d)
+            P[k, 2 * i] = torch.sin(k / denominator)
+            P[k, 2 * i + 1] = torch.cos(k / denominator)
+    return P
+
+class LearnedSinPositionalEmbedding(nn.Module):
+    def __init__(self, max_len, embedding_dim):
+        super(LearnedSinPositionalEmbedding, self).__init__()
+         
+        self.positional_input = getPositionEncoding(seq_len=max_len, d=embedding_dim*2, n=10_000) #10k is from attention is all...
+        
+        # Determine positional_emb_dim from positional_input
+        positional_emb_dim = self.positional_input.shape[1]
+        
+        # Linear layer with input size of positional_emb_dim and output size of embedding_dim
+        self.linear = nn.Linear(positional_emb_dim, embedding_dim)
+
+    def forward(self, x):
+        batch_size = x.shape[0]
+        # Apply the linear layer to each position
+        x_add = F.relu(self.linear(self.positional_input))
+        x_add = x_add.unsqueeze(0).repeat(batch_size, 1, 1)
+        
+        
+        return x + x_add
+    
+class SinPositionalEmbedding(nn.Module):
+    def __init__(self, max_len, embedding_dim):
+        super(SinPositionalEmbedding, self).__init__()
+        
+        self.positional_input = getPositionEncoding(seq_len=max_len, d=embedding_dim, n=10_000)
+
+    def forward(self, x):
+        batch_size = x.shape[0]
+
+        x_add = self.positional_input.unsqueeze(0).repeat(batch_size, 1, 1)
+        
+        return x + x_add
+    
+class LearnedDoubleCrossBabyWithSinEmbedding(nn.Module):
+    """2 interactions in the embedding space.  then sums.  that sum could be learned?"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                ):
+        super(LearnedDoubleCrossBabyWithSinEmbedding, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.word_pos_emb = SinPositionalEmbedding(self.sequence_length,self.word_embed)
+        
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = SinPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = SinPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.up_1 = nn.Linear(self.word_embed*5, self.word_embed*10)
+        self.up_2 = nn.Linear(self.word_embed*10,self.vocab_size)
+        self.final = nn.Linear(self.sequence_length, 1)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.up_1(x))
+        #print(x.shape, "up_1")
+        x = F.relu(self.up_2(x))
+        #print(x.shape,"up_2")
+        x = x.transpose(1, 2)
+        x = F.relu(self.final(x))
+        x = x.squeeze(-1)
+        return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self
+    
+class LearnedDoubleCrossBabyWithLearnedSinEmbedding(nn.Module):
+    """2 interactions in the embedding space.  then sums.  that sum could be learned?"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                ):
+        super(LearnedDoubleCrossBabyWithLearnedSinEmbedding, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
+        
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.up_1 = nn.Linear(self.word_embed*5, self.word_embed*10)
+        self.up_2 = nn.Linear(self.word_embed*10,self.vocab_size)
+        self.final = nn.Linear(self.sequence_length, 1)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.up_1(x))
+        #print(x.shape, "up_1")
+        x = F.relu(self.up_2(x))
+        #print(x.shape,"up_2")
+        x = x.transpose(1, 2)
+        x = F.relu(self.final(x))
+        x = x.squeeze(-1)
+        return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self   
+
+class Model_1(nn.Module):
+    """Learned Sin embeddings, and square memory, some linear layers at the end.  one projection to the vocab pred"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                 , linear_dim
+                ):
+        super(Model_1, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.linear_dim = int(linear_dim)
+        self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
+        
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.down_2 = nn.Linear(self.word_embed*5,self.linear_dim)
+        
+        self.flat_down = nn.Linear(self.linear_dim*self.sequence_length,self.linear_dim)
+        
+        self.deep_1 = nn.Linear(self.linear_dim,self.linear_dim)
+        self.deep_2 = nn.Linear(self.linear_dim,self.linear_dim)
+        self.deep_3 = nn.Linear(self.linear_dim,self.linear_dim)
+        
+        self.project = nn.Linear(self.linear_dim,vocab_size)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.down_2(x))
+        #print(x.shape, "final down")
+        x = x.reshape(x.shape[0],-1)
+        #print(x.shape)
+        x = F.relu(self.flat_down(x))
+        #print(x.shape)
+        x = F.relu(self.deep_1(x))
+        x = F.relu(self.deep_2(x))
+        x = F.relu(self.deep_3(x))
+        x = self.project(x)
+        return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self
+    
+class Model_2(nn.Module):
+    """Learned Sin embeddings, and square memory, some linear layers at the end.  one projection to the vocab pred"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                 , linear_dim
+                ):
+        super(Model_2, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.linear_dim = int(linear_dim)
+        self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
+        
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.down_2 = nn.Linear(self.word_embed*5,self.linear_dim)
+        
+        self.flat_down = nn.Linear(self.linear_dim*self.sequence_length,self.linear_dim)
+        
+        self.deep_1 = nn.Linear(self.linear_dim,self.linear_dim)
+        self.deep_2 = nn.Linear(self.linear_dim,self.linear_dim)
+        self.deep_3 = nn.Linear(self.linear_dim,self.linear_dim)
+        
+        self.project_1 = nn.Linear(self.linear_dim,vocab_size)
+        self.project_2 = nn.Linear(self.linear_dim,vocab_size)
+        self.project_3 = nn.Linear(self.linear_dim,vocab_size)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.down_2(x))
+        #print(x.shape, "final down")
+        x = x.reshape(x.shape[0],-1)
+        #print(x.shape)
+        x = F.relu(self.flat_down(x))
+        #print(x.shape)
+        x = F.relu(self.deep_1(x))
+        p1 = self.project_1(x)
+        #print(p1.shape)
+        x = F.relu(self.deep_2(x))
+        p2 = self.project_2(x)
+        #print(p2.shape)
+        x = F.relu(self.deep_3(x))
+        p3 = self.project_1(x)
+        #print(p3.shape)
+        x = p1 + p2 + p3
+        #print(x.shape)
+        return x
+    
+class Model_3(nn.Module):
+    """Learned Sin embeddings, and square memory, some linear layers at the end.  several projections from the same latent"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                 , linear_dim
+                ):
+        super(Model_3, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.linear_dim = int(linear_dim)
+        self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
+        
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.down_2 = nn.Linear(self.word_embed*5,self.linear_dim)
+        
+        self.flat_down = nn.Linear(self.linear_dim*self.sequence_length,self.linear_dim)
+
+        
+        self.project_1 = nn.Linear(self.linear_dim,vocab_size)
+        self.project_2 = nn.Linear(self.linear_dim,vocab_size)
+        self.project_3 = nn.Linear(self.linear_dim,vocab_size)
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.down_2(x))
+        #print(x.shape, "final down")
+        x = x.reshape(x.shape[0],-1)
+        #print(x.shape)
+        x = F.relu(self.flat_down(x))
+        
+        p1 = self.project_1(x)
+        p2 = self.project_2(x)
+        p3 = self.project_3(x)
+        x = p1 + p2 + p3
+        
+        return x
+    
+class Model_4(nn.Module):
+    """Learned Sin embeddings, and square memory, some linear layers at the end. a memory project and a sentence project"""
+    def __init__(self
+                 , vocab_size
+                 , sequence_length
+                 , word_embed
+                 , linear_dim
+                ):
+        super(Model_4, self).__init__()
+        self.vocab_size = int(vocab_size)
+        self.sequence_length = int(sequence_length)
+        self.word_embed = int(word_embed)
+        self.linear_dim = int(linear_dim)
+        self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
+        self.mem_dim = 500
+        
+        self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        
+        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        
+        self.down_2 = nn.Linear(self.word_embed*5,self.linear_dim)
+        
+        self.flat_down = nn.Linear(self.linear_dim*self.sequence_length,self.linear_dim)
+        
+        self.mem_adjust = nn.Linear(self.linear_dim,self.linear_dim)
+        
+        self.mem = SquareMemory(self.linear_dim, self.mem_dim)
+        
+        self.x_project = nn.Linear(self.linear_dim,vocab_size)
+        self.mem_project = nn.Linear(self.mem_dim,vocab_size)
+        
+        
+    def forward(self, x):
+        #print(x.shape)
+        x = F.relu(self.word_embedding(x)) #sentence of word embeddings.  
+        #print(x.shape, "first embedding")
+        #add pos emb here
+        x = self.word_pos_emb(x)
+        #print(x.shape, "after embedding")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape, "after einsum")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "after reshape")
+        x = F.relu(self.reduce(x))
+        x = self.word_pos_emb_reduce(x)
+        #add pos emb here
+        #print(x.shape, "after reduce first cross")
+        x = torch.einsum('bij,bkm->bikj', x, x)
+        #print(x.shape,"second ein")
+        x = x.reshape(x.shape[0],x.shape[1],-1)
+        #print(x.shape, "another reshape")
+        x = F.relu(self.reduce_2(x))
+        x = self.word_pos_emb_reduce_2(x)
+        #as pos emb here
+        #print(x.shape, "second reduce")
+        x = F.relu(self.down_2(x))
+        #print(x.shape, "final down")
+        x = x.reshape(x.shape[0],-1)
+        #print(x.shape)
+        x = F.relu(self.flat_down(x))
+        
+        m_x = F.relu(self.mem_adjust(x))
+        mem = self.mem(m_x)
+        #print(mem.shape)
+        p1 = self.x_project(x)
+        p2 = self.mem_project(mem)
+        
+        x = p1 + p2
         return x

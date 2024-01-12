@@ -7,14 +7,16 @@ import sys
 import os
 import time
 from torch.utils.data import DataLoader
+import torch.nn as nn
 
 
 ## _______________ model______model config______epochs_dataset in kdf data      savename
 ## python train.py LlamaFetus small_config.json 100 DoubleFileDataset half_full fetus_half_full
 ## python train.py MemoryLlama mem_config_1.json 3 CPUDoubleFileDataset half_full mem_debug1
 ## python train.py MemoryLlama mem_config_1.json 2 CPUDoubleFileDataset folder testbb --lr 0.0001
+## python train.py CrossBaby_1 CrossBab1_1_50.json 5 IdxDataset idx_pretrain CrossBB_pretrain --lr 0.00001 --clip 
 
-def train_model(modelname, kwargsfile, epochs, datasetname,datafolder, savename, lr, resume, clip):
+def train_model(modelname, kwargsfile, epochs, datasetname,datafolder, savename, lr, resume, clip, he, CE, ceweight):
     # Load the kwargs from the specified file
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"{device} will be used to train", file=sys.stdout)
@@ -64,6 +66,8 @@ def train_model(modelname, kwargsfile, epochs, datasetname,datafolder, savename,
 
     # Your training loop here
     criterion = torch.nn.MSELoss() #i think this is the right call? idk yet.  
+    criterion_ce = torch.nn.CrossEntropyLoss()
+    
     optimizer = torch.optim.SGD(model.parameters(), lr=lr) 
     print(f"optimizer set with lr={lr}", file=sys.stdout)
     os.makedirs('models', exist_ok=True)
@@ -80,10 +84,30 @@ def train_model(modelname, kwargsfile, epochs, datasetname,datafolder, savename,
             # File does not exist
             print(f"File '{weights_path}' not found", file=sys.stdout)
     
+    for name, param in model.named_parameters():
+        print(f"Layer: {name} | Trainable: {param.requires_grad}", file=sys.stdout)
+    
+    
+    
+    def init_weights(m):
+        if isinstance(m, nn.Linear):
+            #print(m.weight)
+            torch.nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
+            #print("after init:",m.weight)
+            if m.bias is not None:
+                m.bias.data.fill_(0.0)
+        print("he init done!")
+    
+    if he:
+        model.apply(init_weights)
+        #he shook things up, experimenting with it for now.  
+    
     model.train()
+    
     for epoch in range(epochs):
         
         start_time = time.time()
+        distinct_classes = set()
         
         for data, labels in dataloader:
             optimizer.zero_grad()
@@ -91,20 +115,43 @@ def train_model(modelname, kwargsfile, epochs, datasetname,datafolder, savename,
             labels = labels.to(device,dtype=torch.float32) #not sure this is the right place to put onto device.  maybe do it in the dataset? idk
             outputs = model(data)
             loss = criterion(outputs, labels)
-            loss.backward()
+            
+            output_argmax = torch.argmax(outputs,dim=-1)
+            for i in output_argmax:
+                distinct_classes.add(i.item())
+            
+            if CE:
+                label_indices = torch.argmax(labels,dim=-1).long()
+                loss_ce = criterion_ce(outputs, label_indices)
+                
+                # Combine losses
+                combined_loss = loss + ceweight*loss_ce #ceweight is optional now.
+
+                # Backward pass
+                combined_loss.backward()
+            else:
+                loss.backward()
+                
             if clip:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
-            #print("does this work")
-            #print("or does this?",file=sys.stdout)
+            
+            
+            
         mse = loss.item()  # This assumes that your loss is already MSE
+        total_classes = len(distinct_classes)
         
         end_time = time.time()
         elapsed_time = end_time - start_time
         hours, remainder = divmod(int(elapsed_time), 3600)
         minutes, seconds = divmod(remainder, 60)
         print(f"Epoch took {hours:02d}:{minutes:02d}:{seconds:02d}", file=sys.stdout)
-        print(f"Epoch {epoch+1}/{epochs}, mse: {mse:.4f}", file=sys.stdout)
+        print(f"Epoch {epoch+1}/{epochs}, mse: {mse:.4f}, total classes predicted: {total_classes}", file=sys.stdout)
+        
+        if CE:
+            cel = loss_ce.item()
+            print(f"\tCross Entropy Loss: {cel:.4f}")
+        
         model_save_path = os.path.join('models', f'{savename}_trained.pth')
         torch.save(model.state_dict(), model_save_path)
     #i want to save every so many epochs too.  
@@ -126,10 +173,13 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=0.001, help="Learning rate (optional)")
     parser.add_argument("--resume", action="store_true", help="Resume training from a saved model")
     parser.add_argument("--clip", action="store_true", help="apply gradient clipping at 1.0")
+    parser.add_argument("--he", action="store_true", help="performs he init")
+    parser.add_argument("--CE", action="store_true", help="performs Cross Entropy and MSE as loss")
+    parser.add_argument("--ceweight", type=float, default=1.0, help="multiplies the Cross Entropy loss (changes relative weight")
     args = parser.parse_args()
 
 
 
-    train_model(args.modelname, args.kwargsfile, args.epochs, args.datasetname,args.datafolder, args.savename, args.lr, args.resume, args.clip)
+    train_model(args.modelname, args.kwargsfile, args.epochs, args.datasetname,args.datafolder, args.savename, args.lr, args.resume, args.clip, args.he, args.CE, args.ceweight)
 
     
