@@ -818,23 +818,46 @@ class LearnedDoubleCrossBabyWithLearnedSinEmbedding(nn.Module):
                  , vocab_size
                  , sequence_length
                  , word_embed
+                 , first_reduce = None
+                 , second_reduce = None
+                 , up_scale = None
                 ):
         super(LearnedDoubleCrossBabyWithLearnedSinEmbedding, self).__init__()
         self.vocab_size = int(vocab_size)
         self.sequence_length = int(sequence_length)
         self.word_embed = int(word_embed)
+        
+        #deal with defaults for backwards compatibility 
+        #i initially made this so it could scale just by changing the word_embed, thus the multiplication
+        #now we growing these I want more control so:
+        
+        if first_reduce is None:
+            self.first_reduce = self.word_embed*2
+        else:
+            self.first_reduce = int(first_reduce)
+        
+        if second_reduce is None:
+            self.second_reduce = self.word_embed*5
+        else:
+            self.second_reduce = int(second_reduce)
+        
+        if up_scale is None:
+            self.up_scale = self.word_embed*10
+        else:
+            self.up_scale = int(up_scale)
+        
         self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
         
         
         self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
-        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
-        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.first_reduce)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.first_reduce)
         
-        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
-        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        self.reduce_2 = nn.Linear(self.sequence_length*self.first_reduce,self.second_reduce)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(self.sequence_length,self.second_reduce)
         
-        self.up_1 = nn.Linear(self.word_embed*5, self.word_embed*10)
-        self.up_2 = nn.Linear(self.word_embed*10,self.vocab_size)
+        self.up_1 = nn.Linear(self.second_reduce, self.up_scale)
+        self.up_2 = nn.Linear(self.up_scale,self.vocab_size)
         self.final = nn.Linear(self.sequence_length, 1)
         
     def forward(self, x):
@@ -958,6 +981,9 @@ class Model_2(nn.Module):
                  , sequence_length
                  , word_embed
                  , linear_dim
+                 , first_reduce = None
+                 , second_reduce = None
+                 
                 ):
         super(Model_2, self).__init__()
         self.vocab_size = int(vocab_size)
@@ -966,15 +992,24 @@ class Model_2(nn.Module):
         self.linear_dim = int(linear_dim)
         self.word_pos_emb = LearnedSinPositionalEmbedding(self.sequence_length,self.word_embed)
         
+        if first_reduce is None:
+            self.first_reduce = self.word_embed*2
+        else:
+            self.first_reduce = int(first_reduce)
+        
+        if second_reduce is None:
+            self.second_reduce = self.word_embed*5
+        else:
+            self.second_reduce = int(second_reduce)
         
         self.word_embedding = nn.Linear(self.vocab_size,self.word_embed) 
-        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.word_embed*2)
-        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*2)
+        self.reduce = nn.Linear(self.sequence_length*self.word_embed,self.first_reduce)
+        self.word_pos_emb_reduce = LearnedSinPositionalEmbedding(sequence_length,self.first_reduce)
         
-        self.reduce_2 = nn.Linear(self.sequence_length*self.word_embed*2,self.word_embed*5)
-        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.word_embed*5)
+        self.reduce_2 = nn.Linear(self.sequence_length*self.first_reduce,self.second_reduce)
+        self.word_pos_emb_reduce_2 = LearnedSinPositionalEmbedding(sequence_length,self.second_reduce)
         
-        self.down_2 = nn.Linear(self.word_embed*5,self.linear_dim)
+        self.down_2 = nn.Linear(self.second_reduce,self.linear_dim)
         
         self.flat_down = nn.Linear(self.linear_dim*self.sequence_length,self.linear_dim)
         
@@ -1027,6 +1062,13 @@ class Model_2(nn.Module):
         x = p1 + p2 + p3
         #print(x.shape)
         return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self
     
 class Model_3(nn.Module):
     """Learned Sin embeddings, and square memory, some linear layers at the end.  several projections from the same latent"""
@@ -1095,6 +1137,13 @@ class Model_3(nn.Module):
         x = p1 + p2 + p3
         
         return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self
     
 class Model_4(nn.Module):
     """Learned Sin embeddings, and square memory, some linear layers at the end. a memory project and a sentence project"""
@@ -1168,3 +1217,10 @@ class Model_4(nn.Module):
         
         x = p1 + p2
         return x
+    
+    def to(self, device):
+        self = super().to(device)
+        self.word_pos_emb.positional_input = self.word_pos_emb.positional_input.to(device)
+        self.word_pos_emb_reduce.positional_input = self.word_pos_emb_reduce.positional_input.to(device)
+        self.word_pos_emb_reduce_2.positional_input = self.word_pos_emb_reduce_2.positional_input.to(device)
+        return self

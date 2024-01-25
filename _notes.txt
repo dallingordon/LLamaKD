@@ -1,0 +1,332 @@
+1/24/24
+for future dallin>>> make model_train_8 model bigger, or rather, customizable and then big with the config.
+okee, got 8 big.  added the optional params, and made a config that had 928,284,400 params: also maria callas can sing.  going to watch the angelina jolie movie. 
+1b config is gonna be called that.  8_1B_config.json
+_______________________________________________________________________________________________________________________________
+
+1/23/24
+
+make a visualizer.  this is redic you goof
+
+model_train_3_cos_swap.sh gets to mse 5 and sld 0.399.   make it bigger.  
+im going to add some params with defaults, and make it bigger.  
+382,217,913 params in 3_aug_big.json
+
+m_4 can keep training.  everything trending in the right direction.  reduce lr to 0.000005 (thats half)
+33,158,813 params.   will grow soon
+
+m_7 has 44,193,800 params; DefaultCPUAllocator: can't allocate memory:
+fixing batch_size... do it like --lr 
+making edit to train_dif_loss_cos.py done.  i think im a better programmer than i give myself credit for lol
+trying batch_size 20.  
+
+m_7_idx is learning, but slow.  classes predicted went up from 1 to 4.  i'll run that again.  it didn't run out of memory because the input data is ints not floats, way smaller.  do i make more data for it? thats a thought. upped lr to 0.00001. it took 2 hours to do 15 epochs.  20 hours and 100 epochs.  run it
+
+
+cos_z is still increasing with just SLD.  resume again.   it takes a while.  increase time? upped to 40 hours.
+i just decided i want to report mse, even if i am not using to to do back prop.  
+some interesting what ifs.  like, what if that is a way to restrict the loss landscape.  well, duh.  it is trying to get the shape of the data.  then mse after? in conjunction? maybe this is just a way of finding a good starting point? thats a cool thougt.  we want to get the angle of all the predictions in the right configuration, then do mse.  oh i like that.  see bb you not dumb.  well, dumb cute is all :? that should do it
+
+m_6 resume, increase lr to 0.000005 
+
+m_9 ran out when i swapped from idx inputs to noise inputs.  making use of batch size! also, the idx stuff was improving too.  upping idx epochs and lr, then reducing bs
+
+m_5 mse is HIIIII. the class diversity is increasing tho... increasing lr and resuming.  added 5 hours, should get me all 50 epochs.
+
+m3cos: average collapse...
+
+8...collapse.   make it big.
+nope.   thats a next time thing haha
+
+
+
+
+
+
+_____________________________________________________________________________________________________________________________
+
+1/21/24
+
+cos product gets to average...damn.  lets try it with a bigger model.  
+trying it with big_p.json 177,238,300 params.   works with Model_x (Model_4 specifically)
+
+cosz i didn't resume damnit.   upped lr, added resume.  
+model_train_m4_big_z.sh does the cos_op_swap only thing, doesn't do mse, just CE (on the argmax data) and the SLD cosine dist.  uses the 177 mil model.
+
+
+____________________________________________________________________________________________________________________________
+1/20/24
+
+model_train_3_cos_swap.sh is still going down.  reduced lr and resumed.  
+ok, getting some of the bigger ones out there too.   made model_train_3_cos_swap.sh big, it is running.  
+
+train_dif_loss_cos.py is my fave trainer rn
+
+train_dif_loss_cos_op_only.py is lame.  na mse.  abandonning.  
+
+made model_train_3_cos.sh bigger.  
+
+turned down lr on cos product.   it gets low mse, and only 2k classes predicted.   wanna see where it goes.  
+
+model_train_3_cos_op_swap.sh this didn't use mse, but now i maybe want to resume with it? see what happens?
+model_train_3_cos_op_swap.sh fixed it so it uses the math from model_train_cos_swap.  and now it just trains on the cos dist.  
+
+training the big boys now.  
+
+weight the sld higher?
+
+what happens when i do idx input with SLD?  that could be interesting. did it with model_7
+
+model_x config was beefed up.  
+
+multi-layer embedding?  firs is index to lookup, then each of those gets projected? meh
+
+
+____________________________________________________________________________________________________________________________
+
+1/18/24
+
+cos0 had --he in it still, so MSE was NA all the way down.  
+
+resuming m_3_cos.  i might do a scheduler with this one?
+
+model_train_3_cos_swap.sh looks like everything is going down still.   just used the last command.  this had a low lr.  to be fair it had higher ones earlier, but yeah.  i like a scheduler i think.  or plateau.  not sure yet.  
+
+and classes are increasing.  
+
+model_train_3_cos_op_swap.sh had --he.  turned off, turned down the lr, this is the opposite essntially of m3cos.  takes cosines diffs, then mse-s them.  
+
+cos prod looks like it plateaued.   lowered, resumed, resubmitted.
+
+______________________________________________________________________________________________
+
+1/16/24
+model_train_3_cos.sh looks interesting.  right now it adds them.   i am going to try the product as well
+
+took of the index trainer, doing more epochs of noise to logits
+cos O had a bug.  fixed, submitted
+
+kulis_vis
+
+
+model_train_3_cos_op_swap.sh is the opposite of model_train_3_cos.sh.  it does the cosine distance between each the outputs, the labels, and the shuffled labels, then uses mse to minimize the difference in the angles.  not sure if it is mathematically the same.  talk to kulis.  im afraid of the math tbh.  
+it looks like he fucked it up.  removing and running. submitted
+
+
+made train_dif_loss_cos_product.py   it does the dif like in model_train_3_cos.sh but multiplies it by the mse, lets see how that does.  that high mse is going to mess with cosine initially a lot, then it should even out? i think?
+
+
+
+
+______________________________________________________________________________________________
+
+1/15/24
+
+okay, no he and it scaled well.  but i still get to 3.5~ with 10x noise input.  added sqrt, see if that stabilizes it at all.  that is in train_dif_loss_sqrt.py.  
+
+also, try alternating? could try looking for when it plateaus and switching? 
+
+what if i do the dif thing first?
+
+oh i like that actually, just use the dif thing for a bit, then go for error.  i am using the learned sine embeddings one, 
+
+sqrt works with the test, but i had he on.  turned it off....
+
+it is the same task.   i don't think it adds any information.   
+
+trying cosine on the differences.   so yeah, cosine_dist(outputs-shuffled, targets-shuffled).  
+i suppose i could also do mse(cos_dist(outputs,shuffled), cos_dist(targets,shuffled))
+
+
+train_dif_loss_cos_only.py will let me start with just the dif cos dist.  if i wanna.  might make a lot of sense, i think mse outweighs it a lot rn.  
+
+this should be options later.  i don't wanna have to reload the dataset.  should just be conditions in the training loop.  test first sure, but, yeah.   this is unnecesarily slow.
+
+
+__________________________________________________________________________________________________________________
+
+1/14/24
+
+SLD is same as mse at every ecpoch, with batch 50........that aint right
+Made a seperate criterion for SLD mse, trying that.
+
+okay, it was math duh.  the shuffled labels cancelled in the MSE calculation.  squared then took differences.  it makes for a very big number.  I might need to reduce batch size? already clipping gradients..
+
+submitted 1 through 5.  nervous about how high the loss is.  i think the gradient clipping might be able to take care of it, but yeah, idk.  
+
+also, what about the init? i'm not sure that serves me well anymore.  idk.  will see.
+
+
+
+
+got infinities.  
+    weight? do it before you do mse?
+    is it he? turning that off rn
+    
+    1 2 and 3 running without he init.  scaling tomorrow, 
+__________________________________________________________________________________________________________________
+
+1/12/24
+
+tomorrow is my birthday.  who the fuck cares
+
+okay, the ce weight i think is playing a bit of a role, mess with that.  also, sgd might not be ideal.  adagrad/adam plx
+
+okok, doing the dif loss.  this needs a name.  shuffled label difference?
+
+made model_train_test as well as TEST() dataset in kd, should speed up iterations i hope.  
+
+built and testing!
+
+Maybe it needs to alternate? x epochs of one loss, x of the other?  maybe there is so much interference, maybe the 2 objectives are so at odds?
+not sure.  will train 1 after its done.
+1 and 2 are currently running and just use train, i have it in train_dif_loss.py
+
+also, the TEST() dataset has 5files in it total>>..Training on 5 file(s) and 500 sample(s).
+it is predicting like, 300 unique classes.  like, that aint bad.  it seems to hold it up too.  this might actually be something ya old man!!
+__________________________________________________________________________________________________________________
+1/11/24
+
+Bug in the Cross entropy implementation, i was doing cross entropy with outputs and argmax outputs , so it was always almost exactly zero.  
+model 1 may have been correct, it seemed to keep up its diversity of classes, but it didn't do well in the eval.  not sure what that means.  
+
+the ce weight is now passed in via --ceweight.  
+
+model 7 (and higher) need the to() override.  testing 7, if it runs will do same to 8-10
+
+
+______________________________________________________________________________________________________________________________
+1/10/24
+
+okay, one starts out predicting all kinds in epoch one, 16k, then reduces after a few epochs to ~200
+
+add in classes predicted by labels?  no, its time to do the 2 losses duh.  
+
+std_out 2 does the same, with more variance, 600 ish.  
+
+scheduler might be a good idea as well? reduce it fast?  start high then get really low?
+
+also, in std_out_3, IdxDataset for 10 epochs at the end only predicted 1.  wrecked it.  that might not be the way.
+
+ALSO, i had to to the .to override for model_train_7 (uses model_1 in student_models).  test that.
+
+model train 1 now has CE, with turns on CrossEntropy loss as well as MSE.  
+
+mess with optimizers and lr schedules
+
+
+SCHEDULERS:
+    https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html
+        reduce when a metric flattens out,  try this on the combined loss?
+        
+    lr_scheduler.StepLR
+        reduce it every step_size epochs by a factor.  interesting...
+    
+    lr_scheduler.ConstantLR
+        Constant decay until you hit a specified number of epochs.  i like this one i think.  
+        
+    lr_scheduler.ExponentialLR
+        decays by a factor, so you can flatten out.  
+
+
+______________________________________________________________________________________________________________________________
+1/8/24
+clip is vital, getting lots of nans and 1 class so yeah.  adding back in.  submitted all of em (not 10).  
+
+lets do 5 with dropout.  
+
+most i did with all noise, i did a few with idx dataset (one hot inputs, logits out)
+
+______________________________________________________________________________________________________________________________
+1/4/24 ish
+
+he shook stuff up, 
+
+added distinct classes counter. 
+
+Do i turn the other data generator into a val set? not a bad idea.    
+
+first tho, up the learning rate for sure.  take off clip for some.  make --he an optional. I only want it on for the first one, not all ya dig.
+
+
+
+add a model with dropout.  hinton says so
+
+
+
+______________________________________________________________________________________________________________________________
+big baby is toobig to run on my interactive sessions.  train small babies, and then a small baby mem, and make eval submittable.  
+
+welp, that was fast. its the training data.  if you argmax it, you always get the same value.  
+
+we in data_checking_and_dataloader_checking.  details in there.  (what i want to confirm)
+
+
+
+got LLamaBaby and memory baby! they are qsubbed
+in data_gen_develop_notebook.ipynb i have the function to make random binary inputs of the right shape.  i think just make a new gen file.  it uses alpha and beta, you specify a range for how may ones there are (in percent).  
+
+eval
+ DONE!!!!!
+ fetus doesn't work hahahaha
+ new fetus (trainined on very small amount of data...) still predicting all the same idx.  ...
+ 
+    
+
+Dataset:
+    it is slow.  fix that.  
+    CacheDoubleFileDataset is from chatgpt, debug.  caching could be cool.  will see.
+    DONE file condenser: since it takes so long to read files, make fewer files? use a bigger cpu? that could be good. 
+    condenser built, needs more mem to run.  
+    
+    Dataset init (double file) reads them all and counts.  dumb.  just open one and get shapes.  do some multiplication.
+    add mask (hard code the right mask for first step) lower priority rn
+    
+    i think i want to put it all in a json file and then train on that with idx.  see how much of that i can load into memory
+    https://chat.openai.com/c/5dcb7781-f1f6-4a35-aff3-dad3950fe7bb
+    load from json (so bigger batch dim at the beginning for the stored data) and then manage a cache.  might need bigger cpus, but yeah.
+train.py
+
+    It isn't writing the training stuff... maybe redirect in the shell script? testing. i think it is just way slow?
+    I think it is writing, it just takes too long to train.  using less data to see
+    
+    
+    prefetch_factor increases cache? that is an interesting idea.  see how ahead of it i can get?
+    THIS SLAPS
+    okay, CPUDoubleFileDataset is the one to use now.  it keeps it on the cpus until its time to run through the model, train puts it on the GPU. 
+    i think if i can fix the printing i can see if this is hanging somewhere.  rn looks good.
+    
+generate
+    data with half full input tensors.  1000 x 100
+        DONE: make script
+        running....
+    move llama data to half full. #do this in tandem with pointing all data to generated data.  
+    killed half_full :(
+    
+train
+
+    add learning rate as a param.  optional param?
+    DONE qsub model_train_more_data.sh (it will save it in a new location, so no overwrite)
+    not printing accuracies on the scc.  working on that.  added prints and stuff.  maybe its the formatting? idk
+    
+student_models
+    DONE build the high dim "memory" that is a parameters as an input, so it gets back propagated.  see chatgpt hist:
+    https://chat.openai.com/c/d744a9c3-67d4-48ba-b92d-de2c71ea6a93
+    its built! did it in the high_dim_memory_cell.ipynb notebook.  add to a student model now.  make a wee config.  
+    should take as input the sentence latent, then spit out something.  they get concatenated and then predicted.  looks like 6 or 7 are the right memory_dims.  8 is 100 million, 9 is a billion.  so yeah.
+    made MemoryLlama, it is being tested in model_train_mem.sh
+FILES
+model_train.sh:
+    calls this:
+    python train.py LlamaFetus small_config.json 100 DoubleFileDataset half_full fetus_half_full >> fetus_half_full.txt
+
+    train.py takes as arguments:
+        LlamaFetus; model that is in the student_models.py file
+        small_config.json; a config that gets passes as **kwargs to your model
+        100: epochs
+        DoubleFileDataset; the dataset in kd_data_sets.py.  This is probably not a variable, i did work to make it fast but not super memory hungry.
+        half_full; this corresponds to the folder in generated_datasets where your generated data is.  see data_gen_half_full.sh
+        fetus_half_full; this is the name of the model.pth file when it is saved in the models folder.  (running this now)
+        
+        
+data_gen_half_full.sh
