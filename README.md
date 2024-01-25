@@ -37,6 +37,12 @@ CPUDoubleFileDataset is the dataset/dataloader to use.  This is a class in kd_da
 'CrossBaby_1_50' is a save name.  The model is stored with this name.  
 The learning rate can be specified.  Adding --clip at the end will clip gradients to 1.0, and --resume will load the model based on the specified save name.  
 
+# Shuffled Label Differences Cosine Distance
+train_dif_loss_cos.py introduces Shuffled Label Differences Cosine Distance.
+This loss function is my invention.  It requires a batch.  The batch labels are shuffled.  The model outputs are subtracted from these shuffled labels.  
+The targets are also subtracted from these shuffled labels.  The cosine distance is calculated on these two differences and minimized.
+
+
 # Other Files
 
 model_develop_config_generator.ipynb is used to count parameters and generate .json configs. 
